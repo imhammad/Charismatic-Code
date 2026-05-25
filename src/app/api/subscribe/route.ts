@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     // 2. Send the PDF email via Resend
     // Only runs if Kit succeeded
     const { error: emailError } = await resend.emails.send({
-      from: "Hammad Hassan <onboarding@resend.dev>", // ← MUST be a verified domain in Resend
+      from: "Hammad Hassan <hello@charismatic.codes>", // ← MUST be a verified domain in Resend
       to: [email],
       subject: `Your free guide: ${guide.title}`,
       html: `
