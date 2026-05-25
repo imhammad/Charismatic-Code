@@ -56,7 +56,7 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="text-center py-10 text-stone-600 text-sm font-body border-t border-stone-800">
-        <p>© {new Date().getFullYear()} · Made with intention.</p>
+        <p>© {new Date().getFullYear()} · By Hammad Hassan.</p>
       </footer>
     </main>
   );

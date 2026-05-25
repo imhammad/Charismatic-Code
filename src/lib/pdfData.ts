@@ -21,28 +21,28 @@ export const pdfGuides: PdfGuide[] = [
     accentColor: "rose",
     downloadlink: "https://drive.google.com/file/d/1arL7Bn_h5QJ4_7Zcbv2B5ncLcJLqd1bD/view?usp=sharing"
   },
-  {
-    slug: "productivity",
-    title: "Deep Work in 30 Days",
-    description:
-      "A no-fluff system for reclaiming your focus and doing your best work every day, even when life gets noisy.",
-    tagName: "pdf-productivity",
-    tagId: "REPLACE_WITH_KIT_TAG_ID_2",
-    emoji: "⚡",
-    accentColor: "amber",
-    downloadlink: ""
-  },
-  {
-    slug: "clarity",
-    title: "The Clarity Method",
-    description:
-      "Stop overthinking. A step-by-step workbook for making confident decisions faster, with less second-guessing.",
-    tagName: "pdf-clarity",
-    tagId: "REPLACE_WITH_KIT_TAG_ID_3",
-    emoji: "🔭",
-    accentColor: "sky",
-    downloadlink: ""
-  },
+  // {    // extra guides coming soon, just need to create them and upload to drive, then add the links here
+  //   slug: "productivity",
+  //   title: "Deep Work in 30 Days",
+  //   description:
+  //     "A no-fluff system for reclaiming your focus and doing your best work every day, even when life gets noisy.",
+  //   tagName: "pdf-productivity",
+  //   tagId: "REPLACE_WITH_KIT_TAG_ID_2",
+  //   emoji: "⚡",
+  //   accentColor: "amber",
+  //   downloadlink: ""
+  // },
+  // {
+  //   slug: "clarity",
+  //   title: "The Clarity Method",
+  //   description:
+  //     "Stop overthinking. A step-by-step workbook for making confident decisions faster, with less second-guessing.",
+  //   tagName: "pdf-clarity",
+  //   tagId: "REPLACE_WITH_KIT_TAG_ID_3",
+  //   emoji: "🔭",
+  //   accentColor: "sky",
+  //   downloadlink: ""
+  // },
 ];
 
 export function getPdfBySlug(slug: string): PdfGuide | undefined {
