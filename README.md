@@ -83,58 +83,13 @@ That's it — the route, page, and form are all generated automatically.
 
 ---
 
-## Kit Automation Setup
-
-The website subscribes users and tags them. **You must set up the email delivery in Kit separately.** Here's how:
-
 ### For Each PDF Guide:
 
 1. **Upload your PDF** to Kit or any file host (e.g. Google Drive, Dropbox — get a direct download link)
 
-2. **Create an Automation** in Kit:
-   - Go to **Automate** → **Automations** → **New Automation**
-   - Choose **Tag is added** as the trigger
-   - Select the tag (e.g. `pdf-connect`)
-   - Add a **Send Email** action
-   - Write the email, paste the PDF download link
-   - Publish the automation
+2. Create your resend account and attach the API key with .env
 
 3. **Repeat** for each PDF guide.
-
-> **Tip:** You can also use a Kit Sequence instead of an Automation if you want a welcome series after the initial PDF email.
-
----
-
-## Deploying to Vercel
-
-### First Deploy
-
-```bash
-# Option A: Vercel CLI
-npm i -g vercel
-vercel
-
-# Option B: Push to GitHub, then import at vercel.com/new
-```
-
-### Setting Environment Variables on Vercel
-
-1. Go to your project on [vercel.com](https://vercel.com)
-2. **Settings** → **Environment Variables**
-3. Add each variable from `.env.local.example`:
-
-| Variable                  | Environment                      |
-| ------------------------- | -------------------------------- |
-| `KIT_API_KEY`             | Production, Preview, Development |
-| `KIT_API_BASE_URL`        | Production, Preview, Development |
-| `NEXT_PUBLIC_*` variables | Production, Preview, Development |
-
-4. **Redeploy** after adding variables (Settings → Deployments → Redeploy)
-
-### Custom Domain
-
-1. Vercel dashboard → your project → **Settings** → **Domains**
-2. Add your domain and follow DNS instructions
 
 ---
 
