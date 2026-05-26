@@ -21,18 +21,18 @@ export const pdfGuides: PdfGuide[] = [
     accentColor: "rose",
     downloadlink: "https://drive.google.com/file/d/1arL7Bn_h5QJ4_7Zcbv2B5ncLcJLqd1bD/view?usp=sharing"
   },
-  // {    // extra guides coming soon, just need to create them and upload to drive, then add the links here
-  //   slug: "productivity",
-  //   title: "Deep Work in 30 Days",
-  //   description:
-  //     "A no-fluff system for reclaiming your focus and doing your best work every day, even when life gets noisy.",
-  //   tagName: "pdf-productivity",
-  //   tagId: "REPLACE_WITH_KIT_TAG_ID_2",
-  //   emoji: "⚡",
-  //   accentColor: "amber",
-  //   downloadlink: ""
-  // },
-  // {
+  {    
+    slug: "src\app\pdf\BestCSTools.pdf",
+    title: "Top 10 best CS tools for 2026",
+    description:
+      "A no-fluff tools for reclaiming your focus and doing your best work every day, even when life gets noisy.",
+    tagName: "pdf-toolkit-cs2026",
+    tagId: "19806203",
+    emoji: "⚡",
+    accentColor: "amber",
+    downloadlink: "https://drive.google.com/file/d/1-eEpSEyuHwvUeUD4G9jWG36VKZsmFIFc/view?usp=sharing"
+  },
+  // {   // extra guides coming soon, just need to create them and upload to drive, then add the links here
   //   slug: "clarity",
   //   title: "The Clarity Method",
   //   description:
