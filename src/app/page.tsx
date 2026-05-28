@@ -2,9 +2,12 @@ import Link from "next/link";
 import { pdfGuides } from "@/lib/pdfData";
 import GuideCard from "@/components/GuideCard";
 import SocialLinks from "@/components/SocialLinks";
+import CursorSparkles from "@/components/CursorSparkles"; 
 
 export default function HomePage() {
   return (
+    <>
+    <CursorSparkles />
     <main className="relative z-10 min-h-screen">
       {/* Hero */}
       <section className="px-6 pt-24 pb-20 max-w-4xl mx-auto text-center">
@@ -59,5 +62,6 @@ export default function HomePage() {
         <p>© {new Date().getFullYear()} · By Hammad Hassan.</p>
       </footer>
     </main>
+    </>
   );
 }
