@@ -17,8 +17,8 @@ export default function CursorSparkles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0, moving: false });
-  const lastMoveRef = useRef(0);
-  const animationRef = useRef<number>();
+  const lastMoveRef = useRef<number>(0); // fixed: initial value 0
+  const animationRef = useRef<number | undefined>(undefined); // fixed: allow undefined
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,31 +42,28 @@ export default function CursorSparkles() {
       };
       lastMoveRef.current = now;
 
-      // Create 3-8 particles per move (moderate amount)
+      // Create 3-8 particles per move
       const count = Math.floor(Math.random() * 6) + 3;
       for (let i = 0; i < count; i++) {
-        const angle = (Math.random() - 0.5) * Math.PI * 0.8; // narrow cone
+        const angle = (Math.random() - 0.5) * Math.PI * 0.8;
         const speed = Math.random() * 2 + 1;
         particlesRef.current.push({
           x: e.clientX,
           y: e.clientY,
           vx: Math.cos(angle) * speed * (Math.random() - 0.5),
-          vy: Math.sin(angle) * speed * 0.5 - Math.random() * 2, // upward/fall mix
+          vy: Math.sin(angle) * speed * 0.5 - Math.random() * 2,
           size: Math.random() * 4 + 2,
           alpha: 0.8,
           life: 0,
-          maxLife: 40 + Math.random() * 20, // frames
+          maxLife: 40 + Math.random() * 20,
         });
       }
 
-      // Limit particle count
       if (particlesRef.current.length > 300) {
         particlesRef.current = particlesRef.current.slice(-250);
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
-    // Also spawn a few particles on click for extra fun
     const handleClick = (e: MouseEvent) => {
       for (let i = 0; i < 12; i++) {
         particlesRef.current.push({
@@ -81,14 +78,14 @@ export default function CursorSparkles() {
         });
       }
     };
+
+    window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("click", handleClick);
 
-    let lastTimestamp = 0;
-    const animate = (timestamp: number) => {
+    const animate = () => {
       if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Update and draw particles
       for (let i = particlesRef.current.length - 1; i >= 0; i--) {
         const p = particlesRef.current[i];
         p.life++;
@@ -97,22 +94,19 @@ export default function CursorSparkles() {
           continue;
         }
 
-        // Update position with gravity
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.15; // gravity
+        p.vy += 0.15;
         p.alpha = 1 - p.life / p.maxLife;
         const size = p.size * (1 - p.life / p.maxLife) + 0.5;
 
-        // Magenta/red colors
-        const hue = Math.random() > 0.6 ? 340 : 360; // 340=magenta, 360=red
+        const hue = Math.random() > 0.6 ? 340 : 360;
         ctx.globalAlpha = p.alpha * 0.7;
         ctx.fillStyle = `hsl(${hue}, 100%, 65%)`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Sometimes add a tiny white core
         if (size > 2) {
           ctx.globalAlpha = p.alpha * 0.4;
           ctx.fillStyle = "#fff";
@@ -122,7 +116,6 @@ export default function CursorSparkles() {
         }
       }
 
-      // Stop moving flag after 200ms
       if (Date.now() - lastMoveRef.current > 200) {
         mouseRef.current.moving = false;
       }
@@ -136,7 +129,9 @@ export default function CursorSparkles() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("click", handleClick);
-      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      if (animationRef.current !== undefined) {
+        cancelAnimationFrame(animationRef.current);
+      }
     };
   }, []);
 
