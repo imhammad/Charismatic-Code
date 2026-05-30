@@ -4,6 +4,7 @@ import GuideCard from "@/components/GuideCard";
 import SocialLinks from "@/components/SocialLinks";
 import CursorSparkles from "@/components/CursorSparkles"; 
 import MicroInteractionCards from "@/components/MicroInteractionCards";
+import FloatingCards from "@/components/FloatingCards";
 
 export default function HomePage() {
   return (
@@ -58,8 +59,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <MicroInteractionCards />
-
+      {/* <MicroInteractionCards /> */}
+      <FloatingCards />
       {/* Footer */}
       <footer className="text-center py-10 text-stone-600 text-sm font-body border-t border-stone-800">
         <p>© {new Date().getFullYear()} · By Hammad Hassan.</p>

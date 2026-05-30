@@ -60,3 +60,4 @@ body::before {
 .group:hover .group-hover\:rotate-3 {
   transform: rotate(3deg);
 }
+
