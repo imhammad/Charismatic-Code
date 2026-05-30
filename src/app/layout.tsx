@@ -32,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable}`}>
-      <body className="bg-stone-950 text-stone-100 antialiased font-body">
+      <body className="bg-stone-950 text-stone-100 antialiased font-body" suppressHydrationWarning>
         {children}
       </body>
     </html>
