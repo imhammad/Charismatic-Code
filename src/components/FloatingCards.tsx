@@ -33,19 +33,19 @@ export default function FloatingCards() {
   const animRef = useRef<number | undefined>(undefined);
   const containerRectRef = useRef({ width: 0, height: 0 });
 
-  const initCards = useCallback(() => {
-    if (!containerRef.current) return;
+  const initCards = useCallback((): CardData[] => {
+    if (!containerRef.current) return [];
     const rect = containerRef.current.getBoundingClientRect();
     containerRectRef.current = { width: rect.width, height: rect.height };
-    const cardWidth = 220;
-    const cardHeight = 240;
+    const cardWidth = 190;
+    const cardHeight = 180;
     return cardsData.map((card, idx) => ({
       id: idx,
       ...card,
       x: random(20, rect.width - cardWidth - 20),
       y: random(20, rect.height - cardHeight - 20),
-      vx: random(-0.8, 0.8),
-      vy: random(-0.8, 0.8),
+      vx: random(-0.5, 0.5),
+      vy: random(-0.5, 0.5),
       width: cardWidth,
       height: cardHeight,
       isDragging: false,
@@ -60,17 +60,19 @@ export default function FloatingCards() {
     if (!container) return;
     const rect = container.getBoundingClientRect();
     containerRectRef.current = { width: rect.width, height: rect.height };
+    
     cardsRef.current.forEach(card => {
       if (card.isDragging || !card.element) return;
+      
       let newX = card.x + card.vx;
       let newY = card.y + card.vy;
-
-      // Wrap-around: teleport to opposite edge
-      if (newX + card.width < 0) newX = rect.width;
-      if (newX > rect.width) newX = -card.width;
-      if (newY + card.height < 0) newY = rect.height;
-      if (newY > rect.height) newY = -card.height;
-
+      
+      newX = ((newX + card.width) % rect.width + rect.width) % rect.width;
+      newX -= card.width;
+      
+      newY = ((newY + card.height) % rect.height + rect.height) % rect.height;
+      newY -= card.height;
+      
       card.x = newX;
       card.y = newY;
       card.element.style.transform = `translate(${card.x}px, ${card.y}px)`;
@@ -80,6 +82,15 @@ export default function FloatingCards() {
   useEffect(() => {
     if (!containerRef.current) return;
     cardsRef.current = initCards();
+    
+    // Attach elements after DOM is ready – cast to HTMLDivElement
+    cardsRef.current.forEach(card => {
+      const el = document.getElementById(`float-card-${card.id}`) as HTMLDivElement | null;
+      if (el) {
+        card.element = el;
+        el.style.transform = `translate(${card.x}px, ${card.y}px)`;
+      }
+    });
 
     const step = () => {
       updatePositions();
@@ -92,23 +103,12 @@ export default function FloatingCards() {
     };
   }, [initCards, updatePositions]);
 
-  // Store element refs after mount
-  useEffect(() => {
-    cardsRef.current.forEach(card => {
-      const el = document.getElementById(`float-card-${card.id}`);
-      if (el) {
-        card.element = el;
-        el.style.transform = `translate(${card.x}px, ${card.y}px)`;
-      }
-    });
-  }, []); // run once after DOM ready
-
   const handlePointerDown = (e: React.PointerEvent, id: number) => {
     const card = cardsRef.current.find(c => c.id === id);
     if (!card || !card.element || !containerRef.current) return;
     e.preventDefault();
-    card.element.setPointerCapture(e.pointerId); // crucial for smooth drag
-
+    card.element.setPointerCapture(e.pointerId);
+    
     card.isDragging = true;
     const rect = card.element.getBoundingClientRect();
     const containerRect = containerRef.current.getBoundingClientRect();
@@ -129,11 +129,11 @@ export default function FloatingCards() {
     };
 
     const onPointerUp = (upEvent: PointerEvent) => {
-      const deltaX = upEvent.clientX - (e.clientX);
-      const deltaY = upEvent.clientY - (e.clientY);
-      card.vx = deltaX * 0.15;
-      card.vy = deltaY * 0.15;
-      const maxSpeed = 4;
+      const deltaX = upEvent.clientX - e.clientX;
+      const deltaY = upEvent.clientY - e.clientY;
+      card.vx = deltaX * 0.08;
+      card.vy = deltaY * 0.08;
+      const maxSpeed = 1.8;
       card.vx = Math.min(maxSpeed, Math.max(-maxSpeed, card.vx));
       card.vy = Math.min(maxSpeed, Math.max(-maxSpeed, card.vy));
       card.isDragging = false;
@@ -146,19 +146,18 @@ export default function FloatingCards() {
   };
 
   return (
-    <section className="px-4 py-16 max-w-4xl mx-auto">
+    <section className="px-4 py-16 w-full">
       <h2 className="font-display text-2xl text-stone-300 mb-8 text-center">
         ✨ Floating Sparks Universe ✨
       </h2>
       <div
         ref={containerRef}
-        className="relative w-full sm:w-[85%] md:w-[75%] mx-auto min-h-[420px] rounded-2xl border border-amber-500/30 bg-black/40 backdrop-blur-sm overflow-hidden shadow-2xl"
+        className="relative w-full sm:w-[90%] md:w-[85%] lg:w-[80%] mx-auto h-[420px] rounded-2xl border border-amber-500/30 bg-black/40 backdrop-blur-sm overflow-hidden shadow-2xl"
         style={{
           background: "radial-gradient(circle at 20% 30%, rgba(255,215,0,0.08) 1px, transparent 1px), radial-gradient(circle at 70% 80%, rgba(255,100,150,0.06) 1px, transparent 1px)",
           backgroundSize: "40px 40px, 60px 60px",
         }}
       >
-        {/* Static starfield */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute w-full h-full" style={{ backgroundImage: "radial-gradient(white 1px, transparent 1px)", backgroundSize: "30px 30px", opacity: 0.3 }} />
         </div>
@@ -168,11 +167,11 @@ export default function FloatingCards() {
             key={idx}
             id={`float-card-${idx}`}
             onPointerDown={(e) => handlePointerDown(e, idx)}
-            className="absolute rounded-xl border border-amber-400/40 bg-stone-900/80 p-4 backdrop-blur-sm cursor-grab active:cursor-grabbing transition-all duration-150 hover:scale-105 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/30 will-change-transform"
-            style={{ width: 220, height: 240, touchAction: "none" }}
+            className="absolute rounded-xl border border-amber-400/40 bg-stone-900/80 p-3 backdrop-blur-sm cursor-grab active:cursor-grabbing transition-all duration-150 hover:scale-105 hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/30 will-change-transform"
+            style={{ width: 190, height: 180, touchAction: "none" }}
           >
-            <div className="text-3xl mb-2">{card.emoji}</div>
-            <h3 className="font-display text-md font-bold text-stone-100 mb-1">
+            <div className="text-2xl mb-1">{card.emoji}</div>
+            <h3 className="font-display text-sm font-bold text-stone-100 mb-1 leading-tight">
               {card.title}
             </h3>
             <p className="font-body text-stone-400 text-xs leading-relaxed">
