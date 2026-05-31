@@ -4,13 +4,13 @@ import GuideCard from "@/components/GuideCard";
 import SocialLinks from "@/components/SocialLinks";
 import CursorSparkles from "@/components/CursorSparkles"; 
 import FloatingCards from "@/components/FloatingCards";
-import BackgroundGrid from "@/components/BackgroundGrid";
+
 
 export default function HomePage() {
   return (
     <>
     <CursorSparkles />
-    <BackgroundGrid />
+    
     <main className="relative z-10 min-h-screen">
       {/* Hero */}
       <section className="px-6 pt-24 pb-20 max-w-4xl mx-auto text-center">
